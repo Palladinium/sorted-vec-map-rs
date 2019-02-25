@@ -67,7 +67,7 @@ impl<K: Ord, V> SortedVecMap<K, V> {
         Self { vec }
     }
 
-    // Replicated `Vec<K, V>` APIs follow
+    // Replicated `Vec<(K, V)>` APIs follow
     #[inline]
     pub fn new() -> Self {
         Self { vec: Vec::new() }
@@ -101,8 +101,8 @@ impl<K: Ord, V> SortedVecMap<K, V> {
     }
 
     #[inline]
-    pub fn into_boxed_slice(self) -> Box<[(K, V)]> {
-        self.vec.into_boxed_slice()
+    pub fn into_vec(self) -> Vec<(K, V)> {
+        self.vec
     }
 
     #[inline]
@@ -158,7 +158,7 @@ impl<K: Ord, V> SortedVecMap<K, V> {
         }
     }
 
-    // Replicated `SortedVecMap<K, V>` APIs follor
+    // Replicated `BTreeMap<K, V>` APIs follow
 
     #[inline]
     pub fn get<Q>(&self, key: &Q) -> Option<&V>
@@ -958,6 +958,13 @@ where
         for (k, v) in iter {
             self.insert(k, v);
         }
+    }
+}
+
+impl<K: Ord, V> Into<Vec<(K, V)>> for SortedVecMap<K, V> {
+    #[inline]
+    fn into(self) -> Vec<(K, V)> {
+        self.into_vec()
     }
 }
 

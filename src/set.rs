@@ -97,8 +97,8 @@ impl<T: Ord> SortedVecSet<T> {
     }
 
     #[inline]
-    pub fn into_boxed_slice(self) -> Box<[T]> {
-        self.vec.into_boxed_slice()
+    pub fn into_vec(self) -> Vec<T> {
+        self.vec
     }
 
     #[inline]
@@ -635,8 +635,16 @@ impl<T: Ord> Extend<T> for SortedVecSet<T> {
 }
 
 impl<'a, T: 'a + Ord + Copy> Extend<&'a T> for SortedVecSet<T> {
+    #[inline]
     fn extend<I: IntoIterator<Item = &'a T>>(&mut self, iter: I) {
         self.extend(iter.into_iter().cloned());
+    }
+}
+
+impl<T: Ord> Into<Vec<T>> for SortedVecSet<T> {
+    #[inline]
+    fn into(self) -> Vec<T> {
+        self.into_vec()
     }
 }
 
