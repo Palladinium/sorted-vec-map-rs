@@ -1,3 +1,5 @@
+#![doc(html_root_url = "https://docs.rs/sorted_vec_map/0.1.0")]
+
 pub mod map;
 pub mod set;
 

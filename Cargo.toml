@@ -3,6 +3,15 @@ name = "sorted_vec_map"
 version = "0.1.0"
 authors = ["Patrick Chieppe <patrick.chieppe@hotmail.com>"]
 edition = "2018"
+description = "Drop-in replacements for BTreeMap and BTreeSet, backed by a Vec"
+repository = "https://github.com/Palladinium/sorted-vec-map-rs"
+license = "MIT"
+readme = "README.md"
+keywords = ["datastructure", "map", "set"]
+categories = ["data-structures"]
 
 [dependencies]
 serde = "^1.0.88"
+
+[dev-dependencies]
+version-sync = "^0.7"
