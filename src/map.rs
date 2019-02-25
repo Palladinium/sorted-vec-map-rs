@@ -121,11 +121,11 @@ impl<K: Ord, V> SortedVecMap<K, V> {
     }
 
     #[inline]
-    pub fn retain<F>(&mut self, f: F)
+    pub fn retain<F>(&mut self, mut f: F)
     where
-        F: FnMut(&(K, V)) -> bool,
+        F: FnMut((&K, &V)) -> bool,
     {
-        self.vec.retain(f)
+        self.vec.retain(|e| f((&e.0, &e.1)))
     }
 
     #[inline]
