@@ -1,0 +1,8 @@
+[package]
+name = "sorted_vec_map"
+version = "0.1.0"
+authors = ["Patrick Chieppe <patrick.chieppe@hotmail.com>"]
+edition = "2018"
+
+[dependencies]
+serde = "^1.0.88"
