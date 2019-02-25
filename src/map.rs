@@ -19,7 +19,7 @@ use serde::{
 };
 
 /// A structure similar to `BTreeMap`, implemented in terms of a sorted `Vec<K, V>`.
-/// Exposes as much of both the `Vec` and `BTreeMap` APIs as possible, excluding any `Vec` operations that may break the sorting.
+/// The API of this struct will attempt to be, by convention, as compatible to `BTreeMap` as possible.
 #[derive(Default)]
 pub struct SortedVecMap<K, V> {
     vec: Vec<(K, V)>,
@@ -158,7 +158,7 @@ impl<K: Ord, V> SortedVecMap<K, V> {
         }
     }
 
-    // Replicated `BTreeMap<K, V>` APIs follor
+    // Replicated `SortedVecMap<K, V>` APIs follor
 
     #[inline]
     pub fn get<Q>(&self, key: &Q) -> Option<&V>
@@ -382,7 +382,7 @@ impl<K: Ord, V> SortedVecMap<K, V> {
     {
         match (range.start_bound(), range.end_bound()) {
             (Excluded(s), Excluded(e)) if s == e => {
-                panic!("range start and end are equal and excluded in BTreeMap")
+                panic!("range start and end are equal and excluded in SortedVecMap")
             }
             (Included(s), Included(e))
             | (Included(s), Excluded(e))
@@ -390,7 +390,7 @@ impl<K: Ord, V> SortedVecMap<K, V> {
             | (Excluded(s), Excluded(e))
                 if s > e =>
             {
-                panic!("range start is greater than range end in BTreeMap")
+                panic!("range start is greater than range end in SortedVecMap")
             }
             _ => {}
         };
@@ -425,6 +425,14 @@ impl<K: Ord, V> SortedVecMap<K, V> {
 
 type Drain<'a, K, V> = vec::Drain<'a, (K, V)>;
 
+/// An iterator over the entries of a `SortedVecMap`.
+///
+/// This `struct` is created by the [`iter`] method on [`SortedVecMap`]. See its
+/// documentation for more.
+///
+/// [`iter`]: struct.SortedVecMap.html#method.iter
+/// [`SortedVecMap`]: struct.SortedVecMap.html
+#[derive(Debug, Clone)]
 pub struct Iter<'a, K, V> {
     iter: slice::Iter<'a, (K, V)>,
 }
@@ -450,6 +458,14 @@ impl<'a, K, V> DoubleEndedIterator for Iter<'a, K, V> {
     }
 }
 
+/// A mutable iterator over the entries of a `SortedVecMap`.
+///
+/// This `struct` is created by the [`iter_mut`] method on [`SortedVecMap`]. See its
+/// documentation for more.
+///
+/// [`iter_mut`]: struct.SortedVecMap.html#method.iter_mut
+/// [`SortedVecMap`]: struct.SortedVecMap.html
+#[derive(Debug)]
 pub struct IterMut<'a, K, V> {
     iter: slice::IterMut<'a, (K, V)>,
 }
@@ -475,6 +491,12 @@ impl<'a, K, V> DoubleEndedIterator for IterMut<'a, K, V> {
     }
 }
 
+/// A view into a single entry in a map, which may either be vacant or occupied.
+///
+/// This `enum` is constructed from the [`entry`] method on [`SortedVecMap`].
+///
+/// [`SortedVecMap`]: struct.SortedVecMap.html
+/// [`entry`]: struct.SortedVecMap.html#method.entry
 pub enum Entry<'a, K, V> {
     Vacant(VacantEntry<'a, K, V>),
     Occupied(OccupiedEntry<'a, K, V>),
@@ -537,6 +559,10 @@ impl<'a, K: 'a + fmt::Debug + Ord, V: 'a + fmt::Debug> fmt::Debug for Entry<'a, 
     }
 }
 
+/// A view into a vacant entry in a `SortedVecMap`.
+/// It is part of the [`Entry`] enum.
+///
+/// [`Entry`]: enum.Entry.html
 pub struct VacantEntry<'a, K, V> {
     key: K,
     vec: &'a mut Vec<(K, V)>,
@@ -567,6 +593,10 @@ impl<'a, K: Ord, V> VacantEntry<'a, K, V> {
     }
 }
 
+/// A view into an occupied entry in a `SortedVecMap`.
+/// It is part of the [`Entry`] enum.
+///
+/// [`Entry`]: enum.Entry.html
 pub struct OccupiedEntry<'a, K, V> {
     key: K,
     vec: &'a mut Vec<(K, V)>,
@@ -629,7 +659,14 @@ impl<K: Ord + Clone, V: Clone> SortedVecMap<K, V> {
     }
 }
 
-#[derive(Clone)]
+/// An iterator over the keys of a `SortedVecMap`.
+///
+/// This `struct` is created by the [`keys`] method on [`SortedVecMap`]. See its
+/// documentation for more.
+///
+/// [`keys`]: struct.SortedVecMap.html#method.keys
+/// [`SortedVecMap`]: struct.SortedVecMap.html
+#[derive(Debug, Clone)]
 pub struct Keys<'a, K, V> {
     iter: slice::Iter<'a, (K, V)>,
 }
@@ -659,7 +696,14 @@ impl<'a, K, V> DoubleEndedIterator for Keys<'a, K, V> {
     }
 }
 
-#[derive(Clone)]
+/// An iterator over the values of a `SortedVecMap`.
+///
+/// This `struct` is created by the [`values`] method on [`SortedVecMap`]. See its
+/// documentation for more.
+///
+/// [`values`]: struct.SortedVecMap.html#method.values
+/// [`SortedVecMap`]: struct.SortedVecMap.html
+#[derive(Debug, Clone)]
 pub struct Values<'a, K, V> {
     iter: slice::Iter<'a, (K, V)>,
 }
@@ -689,6 +733,14 @@ impl<'a, K, V> DoubleEndedIterator for Values<'a, K, V> {
     }
 }
 
+/// A mutable iterator over the values of a `SortedVecMap`.
+///
+/// This `struct` is created by the [`values_mut`] method on [`SortedVecMap`]. See its
+/// documentation for more.
+///
+/// [`values_mut`]: struct.SortedVecMap.html#method.values_mut
+/// [`SortedVecMap`]: struct.SortedVecMap.html
+#[derive(Debug)]
 pub struct ValuesMut<'a, K, V> {
     iter: slice::IterMut<'a, (K, V)>,
 }
@@ -749,15 +801,53 @@ impl<K: Ord + Hash, V: Hash> Hash for SortedVecMap<K, V> {
     }
 }
 
+/// An owning iterator over the entries of a `SortedVecMap`.
+///
+/// This `struct` is created by the [`into_iter`] method on [`SortedVecMap`][`SortedVecMap`]
+/// (provided by the `IntoIterator` trait). See its documentation for more.
+///
+/// [`into_iter`]: struct.SortedVecMap.html#method.into_iter
+/// [`SortedVecMap`]: struct.SortedVecMap.html
+pub struct IntoIter<K, V> {
+    iter: vec::IntoIter<(K, V)>,
+}
+
 impl<K: Ord, V> IntoIterator for SortedVecMap<K, V> {
     type Item = (K, V);
-    type IntoIter = std::vec::IntoIter<(K, V)>;
+    type IntoIter = IntoIter<K, V>;
 
     #[inline]
     fn into_iter(self) -> Self::IntoIter {
-        self.vec.into_iter()
+        IntoIter {
+            iter: self.vec.into_iter(),
+        }
     }
 }
+
+impl<K: Ord, V> Iterator for IntoIter<K, V> {
+    type Item = (K, V);
+
+    #[inline]
+    fn next(&mut self) -> Option<Self::Item> {
+        self.iter.next()
+    }
+
+    #[inline]
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.iter.size_hint()
+    }
+}
+
+impl<K: Ord, V> DoubleEndedIterator for IntoIter<K, V> {
+    #[inline]
+    fn next_back(&mut self) -> Option<Self::Item> {
+        self.iter.next_back()
+    }
+}
+
+impl<K: Ord, V> ExactSizeIterator for IntoIter<K, V> {}
+
+impl<K: Ord, V> FusedIterator for IntoIter<K, V> {}
 
 impl<'a, K: Ord, V> IntoIterator for &'a mut SortedVecMap<K, V> {
     type Item = (&'a K, &'a mut V);
@@ -779,6 +869,14 @@ impl<'a, K: Ord, V> IntoIterator for &'a SortedVecMap<K, V> {
     }
 }
 
+/// An iterator over a sub-range of entries in a `SortedVecMap`.
+///
+/// This `struct` is created by the [`range`] method on [`SortedVecMap`]. See its
+/// documentation for more.
+///
+/// [`range`]: struct.SortedVecMap.html#method.range
+/// [`SortedVecMap`]: struct.SortedVecMap.html
+#[derive(Debug, Clone)]
 pub struct Range<'a, K, V> {
     iter: slice::Iter<'a, (K, V)>,
 }
@@ -797,6 +895,14 @@ impl<'a, K: Ord, V> Iterator for Range<'a, K, V> {
     }
 }
 
+/// A mutable iterator over a sub-range of entries in a `SortedVecMap`.
+///
+/// This `struct` is created by the [`range_mut`] method on [`SortedVecMap`]. See its
+/// documentation for more.
+///
+/// [`range_mut`]: struct.SortedVecMap.html#method.range_mut
+/// [`SortedVecMap`]: struct.SortedVecMap.html
+#[derive(Debug)]
 pub struct RangeMut<'a, K, V> {
     iter: slice::IterMut<'a, (K, V)>,
 }
