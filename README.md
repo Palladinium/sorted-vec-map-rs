@@ -6,7 +6,7 @@ Currently the only tests are copied straight from the `BTreeMap`/`BTreeSet` impl
 
 # Complexity
 
-                              | Indexing | Lookup    | Insertion | Deletion  |
+ Data structure               | Indexing | Lookup    | Insertion | Deletion  |
 ------------------------------|----------|-----------|-----------|-----------|
 `SortedVecMap`/`SortedVecSet` | O(1)     | O(log(n)) | O(n)      | O(n)      |
 `BTreeMap`/`BTreeSet`         | O(n) (*) | O(log(n)) | O(log(n)) | O(log(n)) |
