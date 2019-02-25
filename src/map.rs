@@ -347,9 +347,8 @@ impl<K: Ord, V> SortedVecMap<K, V> {
         }
     }
 
-    #[inline]
-    /// Private because it would allow users to modify keys. Use `range_mut` instead.
-    pub fn range_as_mut_slice<T, R>(&mut self, range: R) -> &mut [(K, V)]
+    // Private because it would allow users to modify keys. Use `range_mut` instead.
+    fn range_as_mut_slice<T, R>(&mut self, range: R) -> &mut [(K, V)]
     where
         K: Borrow<T>,
         R: RangeBounds<T>,
