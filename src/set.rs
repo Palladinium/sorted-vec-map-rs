@@ -18,8 +18,8 @@ use serde::{
     ser::{Serialize, SerializeSeq, Serializer},
 };
 
-/// A drop-in replacement to `BTreeMap`, implemented in terms of a sorted `Vec<K, V>`.
-/// It exposes the same API as `BTreeMap`, while also allowing the contents of the undelying `Vec` to be accessed via `.as_slice()`
+/// A structure similar to `BTreeSet`, implemented in terms of a sorted `Vec<K, V>`.
+/// The API of this struct will attempt to be, by convention, as compatible to `BTreeSet` as possible.
 #[derive(Default)]
 pub struct SortedVecSet<T> {
     vec: Vec<T>,
@@ -163,7 +163,7 @@ impl<T: Ord> SortedVecSet<T> {
         }
     }
 
-    // Replicated `BTreeSet<T>` APIs
+    // Replicated `BTreeSet<T>` APIs follow
 
     #[inline]
     pub fn difference<'a>(&'a self, other: &'a SortedVecSet<T>) -> Difference<'a, T> {
