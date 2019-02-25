@@ -1,6 +1,8 @@
 pub mod map;
 pub mod set;
 
+pub use self::{map::*, set::*};
+
 #[cfg(test)]
 mod test_utils {
     pub struct DeterministicRng {
