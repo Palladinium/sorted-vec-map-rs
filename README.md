@@ -1,5 +1,5 @@
 # sorted_vec_map
-A drop-in replacement for `BTreeMap`/`BTreeSet` backed by a `Vec` that exposes the same API and enforces the same invariants, while also allowing (immutable) access to the underlying continuous storage.
+A drop-in replacement for `BTreeMap`/`BTreeSet` backed by a `Vec` that exposes the same API and enforces the same invariants, while also allowing (immutable) access to the underlying continuous storage via `.as_slice()`.
 
 **This library is experimental.**
 Currently the only tests are copied straight from the `BTreeMap`/`BTreeSet` implementations in the standard library.
@@ -11,7 +11,7 @@ Currently the only tests are copied straight from the `BTreeMap`/`BTreeSet` impl
 `SortedVecMap`/`SortedVecSet` | O(1)     | O(log(n)) | O(n)      | O(n)      |
 `BTreeMap`/`BTreeSet`         | O(n) (*) | O(log(n)) | O(log(n)) | O(log(n)) |
 
-(*) `BTreeMap` can support O(log(n)) indexing but it is currently not implemented. See also [this thread on internals.rust-lang.org](https://internals.rust-lang.org/t/suggestion-btreemap-btreeset-o-log-n-n-th-element-access/9515)
+(*) While BTrees can support O(log(n)) indexing, Rust's implementation doesn't since it doesn't store the size of subnodes. See [this thread on internals.rust-lang.org](https://internals.rust-lang.org/t/suggestion-btreemap-btreeset-o-log-n-n-th-element-access/9515)
 
 # License
 
