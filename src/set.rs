@@ -20,7 +20,6 @@ use serde::{
 
 /// A structure similar to `BTreeSet`, implemented in terms of a sorted `Vec<K, V>`.
 /// The API of this struct will attempt to be, by convention, as compatible to `BTreeSet` as possible.
-#[derive(Default)]
 pub struct SortedVecSet<T> {
     vec: Vec<T>,
 }
@@ -28,6 +27,12 @@ pub struct SortedVecSet<T> {
 impl<T: Debug + Ord> Debug for SortedVecSet<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_set().entries(self.iter()).finish()
+    }
+}
+
+impl<T: Ord> Default for SortedVecSet<T> {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
