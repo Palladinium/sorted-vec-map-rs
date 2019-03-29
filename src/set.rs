@@ -702,6 +702,11 @@ impl<'de, T: Ord + Deserialize<'de>> Visitor<'de> for SortedVecSetVisitor<T> {
     }
 }
 
+#[macro_export]
+macro_rules! sorted_vec_set {
+    ($($e:expr),*) => { SortedVecSet::from_vec(vec![$($e),*])};
+}
+
 #[cfg(test)]
 mod tests {
     use super::{super::test_utils::DeterministicRng, *};
@@ -1038,5 +1043,19 @@ mod tests {
             .into_iter()
             .eq(data.clone().into_iter().filter(|x| *x < key)));
         assert!(right.into_iter().eq(data.into_iter().filter(|x| *x >= key)));
+    }
+
+    #[test]
+    fn test_macro() {
+        let set = sorted_vec_set![60, 10, 222, 44, 44];
+
+        let mut set2 = SortedVecSet::new();
+        set2.insert(60);
+        set2.insert(10);
+        set2.insert(222);
+        set2.insert(44);
+        set2.insert(44);
+
+        assert_eq!(set, set2);
     }
 }

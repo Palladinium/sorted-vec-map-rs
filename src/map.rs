@@ -1033,6 +1033,11 @@ where
     }
 }
 
+#[macro_export]
+macro_rules! sorted_vec_map {
+    ($($k:expr => $v:expr),*) => { SortedVecMap::from_vec(vec![$(($k, $v)),*])};
+}
+
 #[cfg(test)]
 mod tests {
     use super::{
@@ -1700,5 +1705,41 @@ mod tests {
         assert!(right
             .into_iter()
             .eq(data.into_iter().filter(|x| x.0 >= key)));
+    }
+
+    #[test]
+
+    fn test_serialization() {
+        let mut map: SortedVecMap<i64, u32> = SortedVecMap::new();
+        map.insert(-5, 10);
+        map.insert(12, 0);
+        map.insert(55, 1213);
+        map.insert(-49, 5);
+        map.insert(10, 2);
+
+        let map2: SortedVecMap<i64, u32> =
+            serde_json::from_str(&serde_json::to_string(&map).unwrap()).unwrap();
+
+        assert_eq!(map2, map);
+    }
+
+    #[test]
+    fn test_macro() {
+        let map = sorted_vec_map! {
+            60 => 12,
+            10 => 0,
+            222 => 54,
+            44 => 22,
+            44 => 10
+        };
+
+        let mut map2 = SortedVecMap::new();
+        map2.insert(60, 12);
+        map2.insert(10, 0);
+        map2.insert(222, 54);
+        map2.insert(44, 10);
+        map2.insert(44, 22);
+
+        assert_eq!(map, map2);
     }
 }
