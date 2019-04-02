@@ -425,6 +425,15 @@ impl<K: Ord, V> SortedVecMap<K, V> {
 
         (start, end)
     }
+
+    #[inline]
+    pub fn position<Q>(&mut self, key: &Q) -> Result<usize, usize>
+    where
+        Q: Ord + ?Sized,
+        K: Borrow<Q>,
+    {
+        self.vec.binary_search_by(|item| item.0.borrow().cmp(key))
+    }
 }
 
 type Drain<'a, K, V> = vec::Drain<'a, (K, V)>;

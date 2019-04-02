@@ -337,6 +337,15 @@ impl<T: Ord> SortedVecSet<T> {
             vec: self.vec.split_off(idx),
         }
     }
+
+    #[inline]
+    pub fn position<Q>(&mut self, key: &Q) -> Result<usize, usize>
+    where
+        Q: Ord + ?Sized,
+        T: Borrow<Q>,
+    {
+        self.vec.binary_search_by(|item| item.borrow().cmp(key))
+    }
 }
 
 fn cmp_opt<T: Ord>(x: Option<&T>, y: Option<&T>, short: Ordering, long: Ordering) -> Ordering {
