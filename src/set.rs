@@ -82,6 +82,11 @@ impl<T: Ord> SortedVecSet<T> {
     }
 
     #[inline]
+    pub unsafe fn from_vec_unchecked(vec: Vec<T>) -> Self {
+        Self { vec }
+    }
+
+    #[inline]
     pub fn capacity(&self) -> usize {
         self.vec.capacity()
     }

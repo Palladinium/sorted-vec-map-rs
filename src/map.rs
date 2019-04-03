@@ -72,6 +72,11 @@ impl<K: Ord, V> SortedVecMap<K, V> {
         Self { vec }
     }
 
+    #[inline]
+    pub unsafe fn from_vec_unchecked(vec: Vec<(K, V)>) -> Self {
+        Self { vec }
+    }
+
     // Replicated `Vec<(K, V)>` APIs follow
     #[inline]
     pub fn new() -> Self {
