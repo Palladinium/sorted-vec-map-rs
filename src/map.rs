@@ -73,7 +73,7 @@ impl<K: Ord, V> SortedVecMap<K, V> {
     }
 
     #[inline]
-    pub unsafe fn from_vec_unchecked(vec: Vec<(K, V)>) -> Self {
+    pub fn from_vec_unchecked(vec: Vec<(K, V)>) -> Self {
         Self { vec }
     }
 
