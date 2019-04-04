@@ -344,7 +344,7 @@ impl<T: Ord> SortedVecSet<T> {
     }
 
     #[inline]
-    pub fn position<Q>(&mut self, key: &Q) -> Result<usize, usize>
+    pub fn position<Q>(&self, key: &Q) -> Result<usize, usize>
     where
         Q: Ord + ?Sized,
         T: Borrow<Q>,

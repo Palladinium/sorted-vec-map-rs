@@ -432,7 +432,7 @@ impl<K: Ord, V> SortedVecMap<K, V> {
     }
 
     #[inline]
-    pub fn position<Q>(&mut self, key: &Q) -> Result<usize, usize>
+    pub fn position<Q>(&self, key: &Q) -> Result<usize, usize>
     where
         Q: Ord + ?Sized,
         K: Borrow<Q>,
